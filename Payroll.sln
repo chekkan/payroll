@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5D526535-E7C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll", "src\Payroll\Payroll.csproj", "{72994961-79C2-452D-B384-C931FC7ABB44}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{DFC06733-9A57-4EA1-8E7B-4859A65FA135}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payroll.UnitTests", "test\Payroll.UnitTests\Payroll.UnitTests.csproj", "{2B82D779-3A06-4CED-A460-9E9C287AB6FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,8 +36,21 @@ Global
 		{72994961-79C2-452D-B384-C931FC7ABB44}.Release|x64.Build.0 = Release|Any CPU
 		{72994961-79C2-452D-B384-C931FC7ABB44}.Release|x86.ActiveCfg = Release|Any CPU
 		{72994961-79C2-452D-B384-C931FC7ABB44}.Release|x86.Build.0 = Release|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Debug|x64.Build.0 = Debug|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Debug|x86.Build.0 = Debug|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Release|x64.ActiveCfg = Release|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Release|x64.Build.0 = Release|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Release|x86.ActiveCfg = Release|Any CPU
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{72994961-79C2-452D-B384-C931FC7ABB44} = {5D526535-E7C6-40F3-B7E2-32C2DBB4FECA}
+		{2B82D779-3A06-4CED-A460-9E9C287AB6FE} = {DFC06733-9A57-4EA1-8E7B-4859A65FA135}
 	EndGlobalSection
 EndGlobal
