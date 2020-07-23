@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 
 namespace Payroll
 {
@@ -9,6 +10,11 @@ namespace Payroll
         public static void AddEmployee(int id, Employee employee)
         {
             employees[id] = employee;
+        }
+
+        internal static void DeleteEmployee(int id)
+        {
+            employees.Remove(id);
         }
 
         public static Employee GetEmployee(int id)
