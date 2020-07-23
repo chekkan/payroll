@@ -1,7 +1,7 @@
-namespace Payroll
+﻿namespace Payroll
 {
     public class BiweeklySchedule : PaymentSchedule
     {
-        
+
     }
 }
