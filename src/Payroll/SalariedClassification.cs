@@ -7,6 +7,6 @@
             Salary = salary;
         }
 
-        public double Salary { get; set; }
+        public double Salary { get; private set; }
     }
 }
