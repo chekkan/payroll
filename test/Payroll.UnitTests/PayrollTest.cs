@@ -81,5 +81,25 @@ namespace Payroll.UnitTests
             e = PayrollDatabase.GetEmployee(empId);
             Assert.Null(e);
         }
+
+        [Fact]
+        public void TimeCardTransaction()
+        {
+            int empId = 5;
+
+            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+            t.Execute();
+
+            var tct = new TimeCardTransaction(new DateTime(2005, 7, 31), 8.0, empId);
+            tct.Execute();
+
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.NotNull(e);
+
+            var hc = Assert.IsType<HourlyClassification>(e.Classification);
+            TimeCard tc = hc.GetTimeCard(new DateTime(2005, 7, 31));
+            Assert.NotNull(tc);
+            Assert.Equal(8.0, tc.Hours);
+        }
     }
 }

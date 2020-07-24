@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Payroll
+﻿namespace Payroll
 {
     public interface Transaction
     {

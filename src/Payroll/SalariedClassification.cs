@@ -1,4 +1,6 @@
-﻿namespace Payroll
+﻿using System;
+
+namespace Payroll
 {
     public class SalariedClassification : PaymentClassification
     {
@@ -7,6 +9,6 @@
             Salary = salary;
         }
 
-        public double Salary { get; private set; }
+        public double Salary { get; }
     }
 }
