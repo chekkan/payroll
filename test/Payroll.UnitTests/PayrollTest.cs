@@ -51,6 +51,35 @@ namespace Payroll.UnitTests
         }
 
         [Fact]
+        public void AddCommissionedEmployee()
+        {
+            int empId = 3;
+            var t = new AddCommissionedEmployee(empId,
+                                                "John",
+                                                "Remote",
+                                                900.00,
+                                                10.00);
+            t.Execute();
+
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.Equal("John", e.Name);
+
+            PaymentClassification pc = e.Classification;
+            Assert.True(pc is CommissionedClassification);
+
+            CommissionedClassification cc = pc as CommissionedClassification;
+
+            Assert.Equal(900.00, cc.Salary);
+            Assert.Equal(10.00, cc.CommissionRate);
+
+            PaymentSchedule ps = e.Schedule;
+            Assert.True(ps is BiweeklySchedule);
+
+            PaymentMethod pm = e.Method;
+            Assert.True(pm is HoldMethod);
+        }
+
+        [Fact]
         public void DeleteEmployee()
         {
             int empId = 4;
