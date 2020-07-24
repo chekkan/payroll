@@ -13,18 +13,15 @@ namespace Payroll.UnitTests
             t.Execute();
 
             Employee e = PayrollDatabase.GetEmployee(empId);
+
             Assert.Equal("Bob", e.Name);
-            PaymentClassification pc = e.Classification;
 
-            Assert.True(pc is SalariedClassification);
-            SalariedClassification sc = pc as SalariedClassification;
-
+            var sc = Assert.IsType<SalariedClassification>(e.Classification);
             Assert.Equal(1000.00, sc.Salary);
-            PaymentSchedule ps = e.Schedule;
-            Assert.True(ps is MonthlySchedule);
 
-            PaymentMethod pm = e.Method;
-            Assert.True(pm is HoldMethod);
+            Assert.IsType<MonthlySchedule>(e.Schedule);
+
+            Assert.IsType<HoldMethod>(e.Method);
         }
 
         [Fact]
@@ -37,17 +34,12 @@ namespace Payroll.UnitTests
             Employee e = PayrollDatabase.GetEmployee(empId);
             Assert.Equal("Rob", e.Name);
 
-            PaymentClassification pc = e.Classification;
-            Assert.True(pc is HourlyClassification);
-
-            HourlyClassification hc = pc as HourlyClassification;
-
+            var hc = Assert.IsType<HourlyClassification>(e.Classification);
             Assert.Equal(10.00, hc.HourlyRate);
-            PaymentSchedule ps = e.Schedule;
-            Assert.True(ps is WeeklySchedule);
 
-            PaymentMethod pm = e.Method;
-            Assert.True(pm is HoldMethod);
+            Assert.IsType<WeeklySchedule>(e.Schedule);
+
+            Assert.IsType<HoldMethod>(e.Method);
         }
 
         [Fact]
@@ -64,19 +56,13 @@ namespace Payroll.UnitTests
             Employee e = PayrollDatabase.GetEmployee(empId);
             Assert.Equal("John", e.Name);
 
-            PaymentClassification pc = e.Classification;
-            Assert.True(pc is CommissionedClassification);
-
-            CommissionedClassification cc = pc as CommissionedClassification;
-
+            var cc = Assert.IsType<CommissionedClassification>(e.Classification);
             Assert.Equal(900.00, cc.Salary);
             Assert.Equal(10.00, cc.CommissionRate);
 
-            PaymentSchedule ps = e.Schedule;
-            Assert.True(ps is BiweeklySchedule);
+            Assert.IsType<BiweeklySchedule>(e.Schedule);
 
-            PaymentMethod pm = e.Method;
-            Assert.True(pm is HoldMethod);
+            Assert.IsType<HoldMethod>(e.Method);
         }
 
         [Fact]
