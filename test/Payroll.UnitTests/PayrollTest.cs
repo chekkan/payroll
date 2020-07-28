@@ -151,5 +151,27 @@ namespace Payroll.UnitTests
             Assert.NotNull(e);
             Assert.Equal("Work", e.Address);
         }
+
+        [Fact]
+        public void ChangeHourlyTransaction()
+        {
+            int empId = 3;
+            var t = new AddCommissionedEmployee(empId, "Lance", "Home", 2500, 3.2);
+            t.Execute();
+
+            var cht = new ChangeHourlyTransaction(empId, 27.52);
+            cht.Execute();
+
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.NotNull(e);
+
+            PaymentClassification pc = e.Classification;
+            Assert.NotNull(pc);
+            var hc = Assert.IsType<HourlyClassification>(pc);
+            Assert.Equal(27.52, hc.HourlyRate);
+
+            PaymentSchedule ps = e.Schedule;
+            Assert.IsType<WeeklySchedule>(ps);
+        }
     }
 }
