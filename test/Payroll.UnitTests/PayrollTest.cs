@@ -255,5 +255,22 @@ namespace Payroll.UnitTests
             var mm = Assert.IsType<MailMethod>(pm);
             Assert.Equal("Somewhere", mm.Address);
         }
+
+        [Fact]
+        public void ChangeHoldTransaction()
+        {
+            int empId = 8;
+            var t = new AddSalariedEmployee(empId, "John", "Home", 2200.0);
+            t.Execute();
+
+            var cht = new ChangeHoldTransaction(empId);
+            cht.Execute();
+
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.NotNull(e);
+
+            PaymentMethod pm = e.Method;
+            Assert.IsType<HoldMethod>(pm);
+        }
     }
 }
