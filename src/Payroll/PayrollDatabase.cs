@@ -23,10 +23,11 @@ namespace Payroll
             return employees[id] as Employee;
         }
 
-        internal static Employee GetUnionMember(int memberId)
+        public static Employee GetUnionMember(int memberId)
         {
             return unionMembers[memberId] as Employee;
         }
+
         public static void AddUnionMember(int id, Employee employee)
         {
             unionMembers[id] = employee;

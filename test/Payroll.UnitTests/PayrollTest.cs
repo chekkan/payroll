@@ -107,9 +107,9 @@ namespace Payroll.UnitTests
             Employee e = PayrollDatabase.GetEmployee(empId);
             Assert.NotNull(e);
 
-            var af = new UnionAffiliation();
-            e.Affiliation = af;
             int memberId = 86; // Maxwell Smart
+            var af = new UnionAffiliation(memberId, 12.95);
+            e.Affiliation = af;
             PayrollDatabase.AddUnionMember(memberId, e);
 
             var sct = new ServiceChargeTransaction(memberId,
@@ -271,6 +271,28 @@ namespace Payroll.UnitTests
 
             PaymentMethod pm = e.Method;
             Assert.IsType<HoldMethod>(pm);
+        }
+
+        [Fact]
+        public void ChangeUnionMember()
+        {
+            int empId = 8;
+            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+            t.Execute();
+            int memberId = 7743;
+            var cmt = new ChangeMemberTransaction(empId, memberId, 99.42);
+            cmt.Execute();
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.NotNull(e);
+
+            Affiliation affiliation = e.Affiliation;
+            Assert.NotNull(affiliation);
+            var uf = Assert.IsType<UnionAffiliation>(affiliation);
+            Assert.Equal(99.42, uf.Dues);
+            Employee member = PayrollDatabase.GetUnionMember(memberId);
+            Assert.NotNull(member);
+            Assert.Same(e, member);
+
         }
     }
 }
