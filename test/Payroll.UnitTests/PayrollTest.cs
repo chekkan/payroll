@@ -218,5 +218,24 @@ namespace Payroll.UnitTests
             PaymentSchedule ps = e.Schedule;
             Assert.IsType<BiweeklySchedule>(ps);
         }
+
+        [Fact]
+        public void ChangeDirectTransaction()
+        {
+            int empId = 6;
+            var t = new AddSalariedEmployee(empId, "John", "Home", 2300.0);
+            t.Execute();
+
+            var bank = new Bank();
+            var account = new Account();
+            var cdt = new ChangeDirectTransaction(empId, bank, account);
+            cdt.Execute();
+
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.NotNull(e);
+
+            PaymentMethod pm = e.Method;
+            Assert.IsType<DirectMethod>(pm);
+        }
     }
 }
