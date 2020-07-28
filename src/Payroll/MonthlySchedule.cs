@@ -4,9 +4,13 @@ namespace Payroll
 {
     public class MonthlySchedule : PaymentSchedule
     {
-        public bool IsPayDate(DateTime payDate)
+        private bool IsLastDayOfMonth(DateTime date)
         {
-            return true;
+            int m1 = date.Month;
+            int m2 = date.AddDays(1).Month;
+            return (m1 != m2);
         }
+
+        public bool IsPayDate(DateTime payDate) => IsLastDayOfMonth(payDate);
     }
 }

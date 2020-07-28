@@ -12,12 +12,10 @@
     {
         public DirectMethod(Bank bank, Account account)
         {
-
         }
 
         public void Pay(Paycheck paycheck)
         {
-            throw new System.NotImplementedException();
         }
     }
 }

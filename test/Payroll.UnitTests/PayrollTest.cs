@@ -324,7 +324,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void PaySingleSalariedEmployee()
         {
-            int empId = 1;
+            int empId = 2;
             var t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.0);
             t.Execute();
 
@@ -339,6 +339,21 @@ namespace Payroll.UnitTests
             Assert.Equal("Hold", pc.GetField("Disposition"));
             Assert.Equal(0.0, pc.Deductions);
             Assert.Equal(1000.0, pc.NetPay);
+        }
+
+        [Fact]
+        public void PaySingleSalariedEmployeeOnWrongDate()
+        {
+            int empId = 1;
+            var t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.0);
+            t.Execute();
+
+            var payDate = new DateTime(2001, 11, 29);
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+
+            Paycheck pc = pt.GetPaycheck(empId);
+            Assert.Null(pc);
         }
     }
 }
