@@ -294,5 +294,31 @@ namespace Payroll.UnitTests
             Assert.Same(e, member);
 
         }
+
+        [Fact]
+        public void ChangeUnaffiliatedTransaction()
+        {
+            var empId = 9;
+            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+            t.Execute();
+
+            // Make sure the employee is union affiliated
+            int memberId = 7743;
+            var cmt = new ChangeMemberTransaction(empId, memberId, 99.42);
+            cmt.Execute();
+
+            var cut = new ChangeUnaffiliatedTransaction(empId);
+            cut.Execute();
+
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.NotNull(e);
+
+            Affiliation affiliation = e.Affiliation;
+            Assert.NotNull(affiliation);
+
+            var nf = Assert.IsType<NoAffiliation>(affiliation);
+            Employee member = PayrollDatabase.GetUnionMember(memberId);
+            Assert.Null(member);
+        }
     }
 }

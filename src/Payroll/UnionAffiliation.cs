@@ -8,9 +8,11 @@ namespace Payroll
 
         public UnionAffiliation(int memberId, double dues)
         {
+            MemberId = memberId;
             Dues = dues;
         }
 
+        public int MemberId { get; }
         public double Dues { get; }
 
         public void AddServiceCharge(ServiceCharge serviceCharge)

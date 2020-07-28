@@ -32,5 +32,10 @@ namespace Payroll
         {
             unionMembers[id] = employee;
         }
+
+        public static void RemoveUnionMember(int id)
+        {
+            unionMembers.Remove(id);
+        }
     }
 }
