@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Payroll
 {
@@ -15,7 +15,7 @@ namespace Payroll
         {
             Employee e = PayrollDatabase.GetEmployee(empId);
 
-            if(e != null)
+            if (e != null)
                 Change(e);
             else
                 throw new InvalidOperationException("No such employee.");

@@ -136,5 +136,20 @@ namespace Payroll.UnitTests
             Assert.NotNull(e);
             Assert.Equal("Bob", e.Name);
         }
+
+        [Fact]
+        public void ChangeAddressTransaction()
+        {
+            int empId = 3;
+            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+            t.Execute();
+
+            var cat = new ChangeAddressTransaction(empId, "Work");
+            cat.Execute();
+
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.NotNull(e);
+            Assert.Equal("Work", e.Address);
+        }
     }
 }
