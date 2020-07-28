@@ -14,5 +14,10 @@
         {
 
         }
+
+        public void Pay(Paycheck paycheck)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

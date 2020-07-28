@@ -20,6 +20,11 @@ namespace Payroll
             this.serviceCharge = serviceCharge;
         }
 
+        public double CalculateDeduction(Paycheck paycke)
+        {
+            throw new NotImplementedException();
+        }
+
         public ServiceCharge GetServiceCharge(DateTime time)
         {
             return serviceCharge;

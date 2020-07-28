@@ -18,6 +18,11 @@ namespace Payroll
             this.timeCard = timeCard;
         }
 
+        public double CalculatePay(Paycheck paycheck)
+        {
+            throw new NotImplementedException();
+        }
+
         public TimeCard GetTimeCard(DateTime dateTime)
         {
             return this.timeCard;

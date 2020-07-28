@@ -10,5 +10,7 @@ namespace Payroll
         }
 
         public double Salary { get; }
+
+        public double CalculatePay(Paycheck paycheck) => Salary;
     }
 }

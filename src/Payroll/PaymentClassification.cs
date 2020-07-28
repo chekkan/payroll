@@ -2,6 +2,6 @@
 {
     public interface PaymentClassification
     {
-
+        double CalculatePay(Paycheck paycheck);
     }
 }

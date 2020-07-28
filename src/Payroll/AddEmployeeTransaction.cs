@@ -26,6 +26,7 @@
             e.Classification = pc;
             e.Schedule = ps;
             e.Method = pm;
+            e.Affiliation = new NoAffiliation();
             PayrollDatabase.AddEmployee(empid, e);
         }
     }

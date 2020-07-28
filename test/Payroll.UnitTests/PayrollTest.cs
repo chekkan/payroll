@@ -320,5 +320,25 @@ namespace Payroll.UnitTests
             Employee member = PayrollDatabase.GetUnionMember(memberId);
             Assert.Null(member);
         }
+
+        [Fact]
+        public void PaySingleSalariedEmployee()
+        {
+            int empId = 1;
+            var t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.0);
+            t.Execute();
+
+            var payDate = new DateTime(2001, 11, 30);
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+
+            Paycheck pc = pt.GetPaycheck(empId);
+            Assert.NotNull(pc);
+            Assert.Equal(payDate, pc.PayDate);
+            Assert.Equal(1000.0, pc.GrossPay);
+            Assert.Equal("Hold", pc.GetField("Disposition"));
+            Assert.Equal(0.0, pc.Deductions);
+            Assert.Equal(1000.0, pc.NetPay);
+        }
     }
 }
