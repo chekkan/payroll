@@ -1,4 +1,4 @@
-namespace Payroll
+﻿namespace Payroll
 {
     public abstract class ChangeMethodTransaction : ChangeEmployeeTransaction
     {

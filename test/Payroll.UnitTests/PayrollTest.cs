@@ -237,5 +237,23 @@ namespace Payroll.UnitTests
             PaymentMethod pm = e.Method;
             Assert.IsType<DirectMethod>(pm);
         }
+
+        [Fact]
+        public void ChangeMailTransaction()
+        {
+            int empId = 7;
+            var t = new AddCommissionedEmployee(empId, "Rich", "Home", 2100.0, 10.0);
+            t.Execute();
+
+            var cmt = new ChangeMailTransaction(empId, "Somewhere");
+            cmt.Execute();
+
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.NotNull(e);
+
+            PaymentMethod pm = e.Method;
+            var mm = Assert.IsType<MailMethod>(pm);
+            Assert.Equal("Somewhere", mm.Address);
+        }
     }
 }

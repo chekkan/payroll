@@ -1,4 +1,4 @@
-namespace Payroll
+﻿namespace Payroll
 {
     public class ChangeDirectTransaction : ChangeMethodTransaction
     {

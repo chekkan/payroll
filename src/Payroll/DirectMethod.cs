@@ -1,4 +1,4 @@
-namespace Payroll
+﻿namespace Payroll
 {
     public class Bank
     {
@@ -12,7 +12,7 @@ namespace Payroll
     {
         public DirectMethod(Bank bank, Account account)
         {
-            
+
         }
     }
 }
