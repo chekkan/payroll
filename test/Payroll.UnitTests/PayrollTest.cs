@@ -173,5 +173,27 @@ namespace Payroll.UnitTests
             PaymentSchedule ps = e.Schedule;
             Assert.IsType<WeeklySchedule>(ps);
         }
+
+        [Fact]
+        public void ChangeSalariedTransaction()
+        {
+            int empId = 4;
+            var t = new AddCommissionedEmployee(empId, "Rebecca", "Home", 2600.0, 3.2);
+            t.Execute();
+
+            var cst = new ChangeSalariedTransaction(empId, 2500.0);
+            cst.Execute();
+
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.NotNull(e);
+
+            PaymentClassification pc = e.Classification;
+            Assert.NotNull(e);
+            var sc = Assert.IsType<SalariedClassification>(e.Classification);
+            Assert.Equal(2500.0, sc.Salary);
+
+            PaymentSchedule ps = e.Schedule;
+            Assert.IsType<MonthlySchedule>(ps);
+        }
     }
 }
