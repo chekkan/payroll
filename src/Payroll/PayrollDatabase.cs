@@ -19,6 +19,12 @@ namespace Payroll
             employees.Remove(id);
         }
 
+        public static void DeleteAll()
+        {
+            employees = new Hashtable();
+            unionMembers = new Hashtable();
+        }
+
         public static Employee GetEmployee(int id)
         {
             return employees[id] as Employee;

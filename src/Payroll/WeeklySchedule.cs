@@ -6,7 +6,7 @@ namespace Payroll
     {
         public bool IsPayDate(DateTime payDate)
         {
-            return false;
+            return payDate.DayOfWeek == DayOfWeek.Friday;
         }
     }
 }
