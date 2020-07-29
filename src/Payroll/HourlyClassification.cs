@@ -1,37 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Payroll
 {
     public class HourlyClassification : PaymentClassification
     {
-        private TimeCard timeCard;
+        private readonly IDictionary<DateTime, TimeCard> timeCards;
 
         public HourlyClassification(double hourlyRate)
         {
             HourlyRate = hourlyRate;
+            timeCards = new Dictionary<DateTime, TimeCard>();
         }
 
         public double HourlyRate { get; }
 
         public void AddTimeCard(TimeCard timeCard)
         {
-            this.timeCard = timeCard;
+            timeCards.Add(timeCard.Date, timeCard);
         }
 
         public double CalculatePay(Paycheck paycheck)
         {
             double totalPay = 0.0;
 
-            if (timeCard != null && IsInPayPeriod(timeCard, paycheck.PayDate))
-                totalPay += CalculatePayForTimeCard(timeCard);
+            foreach (var timeCard in timeCards.Values)
+            {
+                if (IsInPayPeriod(timeCard, paycheck.PayDate))
+                    totalPay += CalculatePayForTimeCard(timeCard);
+            }
 
             return totalPay;
         }
 
-        public TimeCard GetTimeCard(DateTime dateTime)
-        {
-            return this.timeCard;
-        }
+        public TimeCard GetTimeCard(DateTime dateTime) => timeCards[dateTime];
 
         private bool IsInPayPeriod(TimeCard card, DateTime payPeriod)
         {

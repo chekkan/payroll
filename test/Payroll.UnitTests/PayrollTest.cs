@@ -427,6 +427,44 @@ namespace Payroll.UnitTests
             Assert.Null(pc);
         }
 
+        [Fact]
+        public void PaySingleHourlyEmployeeTwoTimeCards()
+        {
+            int empId = 2;
+            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+            t.Execute();
+
+            var payDate = new DateTime(2001, 11, 9); // Friday
+
+            var tc = new TimeCardTransaction(payDate, 2.0, empId);
+            tc.Execute();
+            var tc2 = new TimeCardTransaction(payDate.AddDays(-1), 5.0, empId);
+            tc2.Execute();
+
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+            ValidateHourlyPaycheck(pt, empId, payDate, 7 * 15.25);
+        }
+
+        [Fact]
+        public void PaySingleHourlyEmployeeWithTimeCardsSpanningTwoPayPeriods()
+        {
+            int empId = 2;
+            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+            t.Execute();
+
+            var payDate = new DateTime(2001, 11, 9); // Friday
+            var dateInPreviousPayPeriod = new DateTime(2001, 11, 2);
+
+            var tc = new TimeCardTransaction(payDate, 2.0, empId);
+            tc.Execute();
+            var tc2 = new TimeCardTransaction(dateInPreviousPayPeriod, 5.0, empId);
+            tc2.Execute();
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+            ValidateHourlyPaycheck(pt, empId, payDate, 2 * 15.25);
+        }
+
         private void ValidateHourlyPaycheck(PaydayTransaction pt,
                                             int empId,
                                             DateTime payDate,
