@@ -5,6 +5,10 @@ namespace Payroll.UnitTests
 {
     public class PayrollTest
     {
+        const int SalariedEmployeeId = 1;
+        const int CommissionedEmployeeId = 3;
+        const int HourlyEmployeeId = 2;
+
         public PayrollTest()
         {
             PayrollDatabase.DeleteAll();
@@ -13,7 +17,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void AddSalariedEmployee()
         {
-            int empId = 1;
+            int empId = SalariedEmployeeId;
             var t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.00);
             t.Execute();
 
@@ -32,7 +36,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void AddHourlyEmployee()
         {
-            int empId = 2;
+            int empId = CommissionedEmployeeId;
             var t = new AddHourlyEmployee(empId, "Rob", "Work", 10.00);
             t.Execute();
 
@@ -50,7 +54,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void AddCommissionedEmployee()
         {
-            int empId = 3;
+            int empId = HourlyEmployeeId;
             var t = new AddCommissionedEmployee(empId, "John", "Remote", 900.00, 10.00);
             t.Execute();
 
@@ -69,7 +73,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void DeleteEmployee()
         {
-            int empId = 4;
+            int empId = CommissionedEmployeeId;
             var t = new AddCommissionedEmployee(empId, "Bill", "Home", 2500, 3.2);
             t.Execute();
 
@@ -86,7 +90,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void TimeCardTransaction()
         {
-            int empId = 5;
+            int empId = HourlyEmployeeId;
 
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
@@ -106,7 +110,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void SalesReceiptTransaction()
         {
-            int empId = 1;
+            int empId = SalariedEmployeeId;
             var date = new DateTime(2020, 7, 27);
             var amount = 490_000.0;
 
@@ -129,7 +133,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void AddServiceCharge()
         {
-            int empId = 2;
+            int empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
             Employee e = PayrollDatabase.GetEmployee(empId);
@@ -153,7 +157,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeNameTransaction()
         {
-            int empId = 2;
+            int empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
 
@@ -168,7 +172,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeAddressTransaction()
         {
-            int empId = 3;
+            int empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
 
@@ -183,7 +187,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeHourlyTransaction()
         {
-            int empId = 3;
+            int empId = CommissionedEmployeeId;
             var t = new AddCommissionedEmployee(empId, "Lance", "Home", 2500, 3.2);
             t.Execute();
 
@@ -205,7 +209,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeSalariedTransaction()
         {
-            int empId = 4;
+            int empId = CommissionedEmployeeId;
             var t = new AddCommissionedEmployee(empId, "Rebecca", "Home", 2600.0, 3.2);
             t.Execute();
 
@@ -227,7 +231,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeCommissionedTransaction()
         {
-            int empId = 5;
+            int empId = SalariedEmployeeId;
             var t = new AddSalariedEmployee(empId, "John", "Lost", 2300.0);
             t.Execute();
 
@@ -250,7 +254,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeDirectTransaction()
         {
-            int empId = 6;
+            int empId = SalariedEmployeeId;
             var t = new AddSalariedEmployee(empId, "John", "Home", 2300.0);
             t.Execute();
 
@@ -269,7 +273,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeMailTransaction()
         {
-            int empId = 7;
+            int empId = CommissionedEmployeeId;
             var t = new AddCommissionedEmployee(empId, "Rich", "Home", 2100.0, 10.0);
             t.Execute();
 
@@ -287,7 +291,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeHoldTransaction()
         {
-            int empId = 8;
+            int empId = SalariedEmployeeId;
             var t = new AddSalariedEmployee(empId, "John", "Home", 2200.0);
             t.Execute();
 
@@ -304,7 +308,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeUnionMember()
         {
-            int empId = 8;
+            int empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
             int memberId = 7743;
@@ -326,7 +330,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeUnaffiliatedTransaction()
         {
-            var empId = 9;
+            var empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
 
@@ -352,7 +356,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void PaySingleSalariedEmployee()
         {
-            int empId = 2;
+            int empId = SalariedEmployeeId;
             var t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.0);
             t.Execute();
 
@@ -372,7 +376,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void PaySingleSalariedEmployeeOnWrongDate()
         {
-            int empId = 1;
+            int empId = SalariedEmployeeId + 10;
             var t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.0);
             t.Execute();
 
@@ -387,20 +391,20 @@ namespace Payroll.UnitTests
         [Fact]
         public void PayingSingleHourlyEmployeeNoTimeCards()
         {
-            int empId = 2;
+            int empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
 
             var payDate = new DateTime(2001, 11, 9); // Friday
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
-            ValidateHourlyPaycheck(pt, empId, payDate, 0.0);
+            ValidateNoDeductionPaycheck(pt, empId, payDate, 0.0);
         }
 
         [Fact]
         public void PaySingleHourlyEmployeeOneTimeCard()
         {
-            int empId = 2;
+            int empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
 
@@ -411,13 +415,13 @@ namespace Payroll.UnitTests
 
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
-            ValidateHourlyPaycheck(pt, empId, payDate, 30.5);
+            ValidateNoDeductionPaycheck(pt, empId, payDate, 30.5);
         }
 
         [Fact]
         public void PaySingleHourlyEmployeeOvertimeOneTimeCard()
         {
-            int empId = 2;
+            int empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
 
@@ -428,13 +432,13 @@ namespace Payroll.UnitTests
 
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
-            ValidateHourlyPaycheck(pt, empId, payDate, (8 + 1.5) * 15.25);
+            ValidateNoDeductionPaycheck(pt, empId, payDate, (8 + 1.5) * 15.25);
         }
 
         [Fact]
         public void PaySingleHourlyEmployeeOnWrongDate()
         {
-            int empId = 2;
+            int empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
 
@@ -453,7 +457,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void PaySingleHourlyEmployeeTwoTimeCards()
         {
-            int empId = 2;
+            int empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
 
@@ -466,13 +470,13 @@ namespace Payroll.UnitTests
 
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
-            ValidateHourlyPaycheck(pt, empId, payDate, 7 * 15.25);
+            ValidateNoDeductionPaycheck(pt, empId, payDate, 7 * 15.25);
         }
 
         [Fact]
         public void PaySingleHourlyEmployeeWithTimeCardsSpanningTwoPayPeriods()
         {
-            int empId = 2;
+            int empId = HourlyEmployeeId;
             var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
             t.Execute();
 
@@ -485,10 +489,28 @@ namespace Payroll.UnitTests
             tc2.Execute();
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
-            ValidateHourlyPaycheck(pt, empId, payDate, 2 * 15.25);
+            ValidateNoDeductionPaycheck(pt, empId, payDate, 2 * 15.25);
         }
 
-        private void ValidateHourlyPaycheck(PaydayTransaction pt,
+        [Fact]
+        public void PayCommissionedEmployeeWithOneSale()
+        {
+            int empId = CommissionedEmployeeId;
+            var t = new AddCommissionedEmployee(empId, "Bob", "Home", 1500.0, 2.5);
+            t.Execute();
+
+            var payDate = new DateTime(2020, 7, 31); // Last Day
+
+            var srt = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 40_000);
+            srt.Execute();
+
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+
+            ValidateNoDeductionPaycheck(pt, empId, payDate, 40_000 * 2.5 + 1500);
+        }
+
+        private void ValidateNoDeductionPaycheck(PaydayTransaction pt,
                                             int empId,
                                             DateTime payDate,
                                             double pay)

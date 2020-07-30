@@ -22,7 +22,7 @@ namespace Payroll
 
         public double CalculatePay(Paycheck paycheck)
         {
-            throw new System.NotImplementedException();
+            return Salary + (salesReceipt.Amount * CommissionRate);
         }
 
         public void AddSalesReceipt(SalesReceipt salesReceipt)

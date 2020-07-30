@@ -21,8 +21,8 @@ namespace Payroll
 
         public static void DeleteAll()
         {
-            employees = new Hashtable();
-            unionMembers = new Hashtable();
+            employees.Clear();
+            unionMembers.Clear();
         }
 
         public static Employee GetEmployee(int id)
