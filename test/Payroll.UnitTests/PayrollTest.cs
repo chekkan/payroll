@@ -499,7 +499,7 @@ namespace Payroll.UnitTests
             var t = new AddCommissionedEmployee(empId, "Bob", "Home", 1500.0, 2.5);
             t.Execute();
 
-            var payDate = new DateTime(2020, 7, 31); // Last Day
+            var payDate = new DateTime(2020, 7, 10); // Last Day
 
             var srt = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 40_000);
             srt.Execute();
@@ -508,6 +508,43 @@ namespace Payroll.UnitTests
             pt.Execute();
 
             ValidateNoDeductionPaycheck(pt, empId, payDate, 40_000 * 2.5 + 1500);
+        }
+
+        [Fact]
+        public void PayCommissionedEmployeeWithOneSaleWrongDate()
+        {
+            int empId = CommissionedEmployeeId;
+            var t = new AddCommissionedEmployee(empId, "Bob", "Home", 1500.0, 2.5);
+            t.Execute();
+
+            var payDate = new DateTime(2020, 7, 3); // First Friday
+
+            var srt = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 40_000);
+            srt.Execute();
+
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+
+            Paycheck paycheck = pt.GetPaycheck(empId);
+            Assert.Null(paycheck);
+        }
+
+        [Fact]
+        public void PayCommissionedEmployeeWithOneSaleThirdFriday()
+        {
+            int empId = CommissionedEmployeeId + 10;
+            var t = new AddCommissionedEmployee(empId, "Bob", "Home", 1500.0, 2.5);
+            t.Execute();
+
+            var payDate = new DateTime(2020, 7, 24); // Third Friday
+
+            var srt = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 50_000);
+            srt.Execute();
+
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+
+            ValidateNoDeductionPaycheck(pt, empId, payDate, 50_000 * 2.5 + 1500);
         }
 
         private void ValidateNoDeductionPaycheck(PaydayTransaction pt,
