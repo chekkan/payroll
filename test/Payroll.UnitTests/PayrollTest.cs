@@ -104,6 +104,29 @@ namespace Payroll.UnitTests
         }
 
         [Fact]
+        public void SalesReceiptTransaction()
+        {
+            int empId = 1;
+            var date = new DateTime(2020, 7, 27);
+            var amount = 490_000.0;
+
+            var t = new AddCommissionedEmployee(empId, "Bill", "Home", 1800, 3.2);
+            t.Execute();
+
+            var srt = new SalesReceiptTransaction(empId, date, amount);
+            srt.Execute();
+
+            Employee e = PayrollDatabase.GetEmployee(empId);
+            Assert.NotNull(e);
+
+            var pc = Assert.IsType<CommissionedClassification>(e.Classification);
+            SalesReceipt sr = pc.GetSalesReceipt(date);
+            Assert.NotNull(sr);
+            Assert.Equal(date, sr.Date);
+            Assert.Equal(amount, sr.Amount);
+        }
+
+        [Fact]
         public void AddServiceCharge()
         {
             int empId = 2;
