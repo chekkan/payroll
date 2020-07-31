@@ -469,7 +469,7 @@ namespace Payroll.UnitTests
         public void PayCommissionedEmployeeWithOneSaleThirdFriday()
         {
             int empId = SetupCommissionedEmployee(CommissionedEmployeeId + 10);
-            var payDate = new DateTime(2020, 7, 24); // Third Friday
+            var payDate = new DateTime(2020, 7, 24); // Fourth Friday
 
             var srt = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 50_000);
             srt.Execute();
@@ -484,7 +484,7 @@ namespace Payroll.UnitTests
         public void PayCommissionedEmployeeWithTwoSales()
         {
             int empId = SetupCommissionedEmployee();
-            var payDate = new DateTime(2020, 7, 24); // Third Friday
+            var payDate = new DateTime(2020, 7, 24); // Fourth Friday
 
             var srt1 = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 50_000);
             srt1.Execute();
@@ -492,6 +492,28 @@ namespace Payroll.UnitTests
             srt2.Execute();
 
             var pay = (50_000 + 10_000) * 2.5 + 1500;
+
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+
+            ValidateNoDeductionPaycheck(pt, empId, payDate, pay);
+        }
+
+        [Fact]
+        public void PayCommissionedEmployeeWithSalesReceiptsSpanningTwoPayPeriods()
+        {
+            int empId = SetupCommissionedEmployee();
+            var payDate = new DateTime(2020, 7, 24); // Fourth Friday
+            var dateInPreviousPayPeriod = new DateTime(2020, 7, 9);
+
+            var srt1 = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 50_000);
+            srt1.Execute();
+            var srt2 = new SalesReceiptTransaction(empId,
+                                                   dateInPreviousPayPeriod,
+                                                   10_000);
+            srt2.Execute();
+
+            var pay = 50_000 * 2.5 + 1500;
 
             var pt = new PaydayTransaction(payDate);
             pt.Execute();

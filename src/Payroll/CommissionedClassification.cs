@@ -21,13 +21,23 @@ namespace Payroll
         public SalesReceipt GetSalesReceipt(DateTime date) => salesReceipts[date];
 
         public double CalculatePay(Paycheck paycheck) =>
-            salesReceipts.Values.Sum(r => r.Amount)
+            salesReceipts.Values
+            .Where(r => IsInPayPeriod(r, paycheck.PayDate))
+            .Sum(r => r.Amount)
             * CommissionRate
             + Salary;
 
         public void AddSalesReceipt(SalesReceipt salesReceipt)
         {
             this.salesReceipts.Add(salesReceipt.Date, salesReceipt);
+        }
+
+        private static bool IsInPayPeriod(SalesReceipt receipt, DateTime payDate)
+        {
+            DateTime payPeriodEndDate = payDate;
+            DateTime payPeriodStartDate = payDate.AddDays(-14);
+            return receipt.Date <= payPeriodEndDate &&
+                receipt.Date >= payPeriodStartDate;
         }
     }
 }
