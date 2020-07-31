@@ -17,16 +17,13 @@ namespace Payroll.UnitTests
         [Fact]
         public void AddSalariedEmployee()
         {
-            int empId = SalariedEmployeeId;
-            var t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.00);
-            t.Execute();
-
+            int empId = SetupSalariedEmployee();
             Employee e = PayrollDatabase.GetEmployee(empId);
 
-            Assert.Equal("Bob", e.Name);
+            Assert.Equal("John", e.Name);
 
             var sc = Assert.IsType<SalariedClassification>(e.Classification);
-            Assert.Equal(1000.00, sc.Salary);
+            Assert.Equal(2300.0, sc.Salary);
 
             Assert.IsType<MonthlySchedule>(e.Schedule);
 
@@ -36,46 +33,38 @@ namespace Payroll.UnitTests
         [Fact]
         public void AddHourlyEmployee()
         {
-            int empId = CommissionedEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Rob", "Work", 10.00);
-            t.Execute();
-
+            int empId = SetupHourlyEmployee();
             Employee e = PayrollDatabase.GetEmployee(empId);
-            Assert.Equal("Rob", e.Name);
+
+            Assert.Equal("Bill", e.Name);
 
             var hc = Assert.IsType<HourlyClassification>(e.Classification);
-            Assert.Equal(10.00, hc.HourlyRate);
+            Assert.Equal(15.25, hc.HourlyRate);
 
             Assert.IsType<WeeklySchedule>(e.Schedule);
-
             Assert.IsType<HoldMethod>(e.Method);
         }
 
         [Fact]
         public void AddCommissionedEmployee()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddCommissionedEmployee(empId, "John", "Remote", 900.00, 10.00);
-            t.Execute();
-
+            int empId = SetupCommissionedEmployee();
             Employee e = PayrollDatabase.GetEmployee(empId);
-            Assert.Equal("John", e.Name);
+
+            Assert.Equal("Bob", e.Name);
 
             var cc = Assert.IsType<CommissionedClassification>(e.Classification);
-            Assert.Equal(900.00, cc.Salary);
-            Assert.Equal(10.00, cc.CommissionRate);
+            Assert.Equal(1500.0, cc.Salary);
+            Assert.Equal(2.5, cc.CommissionRate);
 
             Assert.IsType<BiweeklySchedule>(e.Schedule);
-
             Assert.IsType<HoldMethod>(e.Method);
         }
 
         [Fact]
         public void DeleteEmployee()
         {
-            int empId = CommissionedEmployeeId;
-            var t = new AddCommissionedEmployee(empId, "Bill", "Home", 2500, 3.2);
-            t.Execute();
+            int empId = SetupCommissionedEmployee();
 
             Employee e = PayrollDatabase.GetEmployee(empId);
             Assert.NotNull(e);
@@ -90,11 +79,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void TimeCardTransaction()
         {
-            int empId = HourlyEmployeeId;
-
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
-
+            int empId = SetupHourlyEmployee();
             var tct = new TimeCardTransaction(new DateTime(2005, 7, 31), 8.0, empId);
             tct.Execute();
 
@@ -110,12 +95,9 @@ namespace Payroll.UnitTests
         [Fact]
         public void SalesReceiptTransaction()
         {
-            int empId = SalariedEmployeeId;
+            int empId = SetupCommissionedEmployee();
             var date = new DateTime(2020, 7, 27);
             var amount = 490_000.0;
-
-            var t = new AddCommissionedEmployee(empId, "Bill", "Home", 1800, 3.2);
-            t.Execute();
 
             var srt = new SalesReceiptTransaction(empId, date, amount);
             srt.Execute();
@@ -133,9 +115,8 @@ namespace Payroll.UnitTests
         [Fact]
         public void AddServiceCharge()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
+            int empId = SetupHourlyEmployee();
+
             Employee e = PayrollDatabase.GetEmployee(empId);
             Assert.NotNull(e);
 
@@ -157,9 +138,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeNameTransaction()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
+            int empId = SetupHourlyEmployee();
 
             var cnt = new ChangeNameTransaction(empId, "Bob");
             cnt.Execute();
@@ -172,9 +151,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeAddressTransaction()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
+            int empId = SetupHourlyEmployee();
 
             var cat = new ChangeAddressTransaction(empId, "Work");
             cat.Execute();
@@ -187,9 +164,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeHourlyTransaction()
         {
-            int empId = CommissionedEmployeeId;
-            var t = new AddCommissionedEmployee(empId, "Lance", "Home", 2500, 3.2);
-            t.Execute();
+            int empId = SetupCommissionedEmployee();
 
             var cht = new ChangeHourlyTransaction(empId, 27.52);
             cht.Execute();
@@ -209,9 +184,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeSalariedTransaction()
         {
-            int empId = CommissionedEmployeeId;
-            var t = new AddCommissionedEmployee(empId, "Rebecca", "Home", 2600.0, 3.2);
-            t.Execute();
+            int empId = SetupCommissionedEmployee();
 
             var cst = new ChangeSalariedTransaction(empId, 2500.0);
             cst.Execute();
@@ -231,9 +204,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeCommissionedTransaction()
         {
-            int empId = SalariedEmployeeId;
-            var t = new AddSalariedEmployee(empId, "John", "Lost", 2300.0);
-            t.Execute();
+            int empId = SetupSalariedEmployee();
 
             var cct = new ChangeCommissionedTransaction(empId, 2200.0, 3.2);
             cct.Execute();
@@ -254,12 +225,10 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeDirectTransaction()
         {
-            int empId = SalariedEmployeeId;
-            var t = new AddSalariedEmployee(empId, "John", "Home", 2300.0);
-            t.Execute();
-
+            int empId = SetupSalariedEmployee();
             var bank = new Bank();
             var account = new Account();
+
             var cdt = new ChangeDirectTransaction(empId, bank, account);
             cdt.Execute();
 
@@ -273,9 +242,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeMailTransaction()
         {
-            int empId = CommissionedEmployeeId;
-            var t = new AddCommissionedEmployee(empId, "Rich", "Home", 2100.0, 10.0);
-            t.Execute();
+            int empId = SetupCommissionedEmployee();
 
             var cmt = new ChangeMailTransaction(empId, "Somewhere");
             cmt.Execute();
@@ -291,9 +258,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeHoldTransaction()
         {
-            int empId = SalariedEmployeeId;
-            var t = new AddSalariedEmployee(empId, "John", "Home", 2200.0);
-            t.Execute();
+            int empId = SetupSalariedEmployee();
 
             var cht = new ChangeHoldTransaction(empId);
             cht.Execute();
@@ -308,19 +273,21 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeUnionMember()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
+            int empId = SetupHourlyEmployee();
             int memberId = 7743;
+
             var cmt = new ChangeMemberTransaction(empId, memberId, 99.42);
             cmt.Execute();
+
             Employee e = PayrollDatabase.GetEmployee(empId);
             Assert.NotNull(e);
 
             Affiliation affiliation = e.Affiliation;
             Assert.NotNull(affiliation);
+
             var uf = Assert.IsType<UnionAffiliation>(affiliation);
             Assert.Equal(99.42, uf.Dues);
+
             Employee member = PayrollDatabase.GetUnionMember(memberId);
             Assert.NotNull(member);
             Assert.Same(e, member);
@@ -330,10 +297,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void ChangeUnaffiliatedTransaction()
         {
-            var empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
-
+            var empId = SetupHourlyEmployee();
             // Make sure the employee is union affiliated
             int memberId = 7743;
             var cmt = new ChangeMemberTransaction(empId, memberId, 99.42);
@@ -356,31 +320,20 @@ namespace Payroll.UnitTests
         [Fact]
         public void PaySingleSalariedEmployee()
         {
-            int empId = SalariedEmployeeId;
-            var t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.0);
-            t.Execute();
-
+            int empId = SetupSalariedEmployee();
             var payDate = new DateTime(2001, 11, 30);
+
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
-
-            Paycheck pc = pt.GetPaycheck(empId);
-            Assert.NotNull(pc);
-            Assert.Equal(payDate, pc.PayDate);
-            Assert.Equal(1000.0, pc.GrossPay);
-            Assert.Equal("Hold", pc.GetField("Disposition"));
-            Assert.Equal(0.0, pc.Deductions);
-            Assert.Equal(1000.0, pc.NetPay);
+            ValidateNoDeductionPaycheck(pt, empId, payDate, 2300.0);
         }
 
         [Fact]
         public void PaySingleSalariedEmployeeOnWrongDate()
         {
-            int empId = SalariedEmployeeId + 10;
-            var t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.0);
-            t.Execute();
-
+            int empId = SetupSalariedEmployee(SalariedEmployeeId + 10);
             var payDate = new DateTime(2001, 11, 29);
+
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
@@ -391,23 +344,19 @@ namespace Payroll.UnitTests
         [Fact]
         public void PayingSingleHourlyEmployeeNoTimeCards()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
-
+            int empId = SetupHourlyEmployee();
             var payDate = new DateTime(2001, 11, 9); // Friday
+
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
+
             ValidateNoDeductionPaycheck(pt, empId, payDate, 0.0);
         }
 
         [Fact]
         public void PaySingleHourlyEmployeeOneTimeCard()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
-
+            int empId = SetupHourlyEmployee();
             var payDate = new DateTime(2001, 11, 9); // Friday
 
             var tc = new TimeCardTransaction(payDate, 2.0, empId);
@@ -415,16 +364,14 @@ namespace Payroll.UnitTests
 
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
+
             ValidateNoDeductionPaycheck(pt, empId, payDate, 30.5);
         }
 
         [Fact]
         public void PaySingleHourlyEmployeeOvertimeOneTimeCard()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
-
+            int empId = SetupHourlyEmployee();
             var payDate = new DateTime(2001, 11, 9); // Friday
 
             var tc = new TimeCardTransaction(payDate, 9.0, empId);
@@ -432,16 +379,14 @@ namespace Payroll.UnitTests
 
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
+
             ValidateNoDeductionPaycheck(pt, empId, payDate, (8 + 1.5) * 15.25);
         }
 
         [Fact]
         public void PaySingleHourlyEmployeeOnWrongDate()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
-
+            int empId = SetupHourlyEmployee();
             var payDate = new DateTime(2001, 11, 8); // Thursday
 
             var tc = new TimeCardTransaction(payDate, 9.0, empId);
@@ -457,10 +402,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void PaySingleHourlyEmployeeTwoTimeCards()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
-
+            int empId = SetupHourlyEmployee();
             var payDate = new DateTime(2001, 11, 9); // Friday
 
             var tc = new TimeCardTransaction(payDate, 2.0, empId);
@@ -470,16 +412,14 @@ namespace Payroll.UnitTests
 
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
+
             ValidateNoDeductionPaycheck(pt, empId, payDate, 7 * 15.25);
         }
 
         [Fact]
         public void PaySingleHourlyEmployeeWithTimeCardsSpanningTwoPayPeriods()
         {
-            int empId = HourlyEmployeeId;
-            var t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
-            t.Execute();
-
+            int empId = SetupHourlyEmployee();
             var payDate = new DateTime(2001, 11, 9); // Friday
             var dateInPreviousPayPeriod = new DateTime(2001, 11, 2);
 
@@ -487,18 +427,17 @@ namespace Payroll.UnitTests
             tc.Execute();
             var tc2 = new TimeCardTransaction(dateInPreviousPayPeriod, 5.0, empId);
             tc2.Execute();
+
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
+
             ValidateNoDeductionPaycheck(pt, empId, payDate, 2 * 15.25);
         }
 
         [Fact]
         public void PayCommissionedEmployeeWithOneSale()
         {
-            int empId = CommissionedEmployeeId;
-            var t = new AddCommissionedEmployee(empId, "Bob", "Home", 1500.0, 2.5);
-            t.Execute();
-
+            int empId = SetupCommissionedEmployee();
             var payDate = new DateTime(2020, 7, 10); // Last Day
 
             var srt = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 40_000);
@@ -513,10 +452,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void PayCommissionedEmployeeWithOneSaleWrongDate()
         {
-            int empId = CommissionedEmployeeId;
-            var t = new AddCommissionedEmployee(empId, "Bob", "Home", 1500.0, 2.5);
-            t.Execute();
-
+            int empId = SetupCommissionedEmployee();
             var payDate = new DateTime(2020, 7, 3); // First Friday
 
             var srt = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 40_000);
@@ -532,10 +468,7 @@ namespace Payroll.UnitTests
         [Fact]
         public void PayCommissionedEmployeeWithOneSaleThirdFriday()
         {
-            int empId = CommissionedEmployeeId + 10;
-            var t = new AddCommissionedEmployee(empId, "Bob", "Home", 1500.0, 2.5);
-            t.Execute();
-
+            int empId = SetupCommissionedEmployee(CommissionedEmployeeId + 10);
             var payDate = new DateTime(2020, 7, 24); // Third Friday
 
             var srt = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 50_000);
@@ -545,6 +478,47 @@ namespace Payroll.UnitTests
             pt.Execute();
 
             ValidateNoDeductionPaycheck(pt, empId, payDate, 50_000 * 2.5 + 1500);
+        }
+
+        [Fact]
+        public void PayCommissionedEmployeeWithTwoSales()
+        {
+            int empId = SetupCommissionedEmployee();
+            var payDate = new DateTime(2020, 7, 24); // Third Friday
+
+            var srt1 = new SalesReceiptTransaction(empId, payDate.AddDays(-1), 50_000);
+            srt1.Execute();
+            var srt2 = new SalesReceiptTransaction(empId, payDate.AddDays(-2), 10_000);
+            srt2.Execute();
+
+            var pay = (50_000 + 10_000) * 2.5 + 1500;
+
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+
+            ValidateNoDeductionPaycheck(pt, empId, payDate, pay);
+        }
+
+        private static int SetupCommissionedEmployee(
+                                                int empId = CommissionedEmployeeId)
+        {
+            new AddCommissionedEmployee(empId, "Bob", "Home", 1500.0, 2.5)
+                .Execute();
+            return empId;
+        }
+
+        private static int SetupHourlyEmployee(int empId = HourlyEmployeeId)
+        {
+            new AddHourlyEmployee(empId, "Bill", "Home", 15.25)
+                .Execute();
+            return empId;
+        }
+
+        private static int SetupSalariedEmployee(int empId = SalariedEmployeeId)
+        {
+            new AddSalariedEmployee(empId, "John", "Lost", 2300.0)
+                .Execute();
+            return empId;
         }
 
         private void ValidateNoDeductionPaycheck(PaydayTransaction pt,
