@@ -10,6 +10,6 @@ namespace Payroll
         }
 
         public DateTime GetPeriodStartDate(DateTime payDate) =>
-            payDate.AddDays(-5);
+            payDate.AddDays(-6);
     }
 }

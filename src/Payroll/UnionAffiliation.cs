@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Payroll
 {
     public class UnionAffiliation : Affiliation
     {
-        private ServiceCharge serviceCharge;
+        private readonly IDictionary<DateTime, ServiceCharge> serviceCharges;
 
         public UnionAffiliation(int memberId, double dues)
         {
             MemberId = memberId;
             Dues = dues;
+            serviceCharges = new Dictionary<DateTime, ServiceCharge>();
         }
 
         public int MemberId { get; }
@@ -17,8 +20,10 @@ namespace Payroll
 
         public void AddServiceCharge(ServiceCharge serviceCharge)
         {
-            this.serviceCharge = serviceCharge;
+            serviceCharges.Add(serviceCharge.Time, serviceCharge);
         }
+
+        public ServiceCharge GetServiceCharge(DateTime time) => serviceCharges[time];
 
         public double CalculateDeduction(Paycheck paycheck)
         {
@@ -26,7 +31,11 @@ namespace Payroll
             int fridays = NumberOfFridaysInPayPeriod(paycheck.PayPeriodStartDate,
                                                      paycheck.PayPeriodEndDate);
             totalDues = Dues * fridays;
-            return totalDues;
+
+            double serviceCharge = ServiceChargeForPeriod(paycheck.PayPeriodStartDate,
+                                                             paycheck.PayPeriodEndDate);
+
+            return totalDues + serviceCharge;
         }
 
         private int NumberOfFridaysInPayPeriod(DateTime payPeriodStart,
@@ -44,9 +53,9 @@ namespace Payroll
             return fridays;
         }
 
-        public ServiceCharge GetServiceCharge(DateTime time)
-        {
-            return serviceCharge;
-        }
+        private double ServiceChargeForPeriod(DateTime startDate, DateTime endDate) =>
+            serviceCharges
+                .Where(charge => charge.Key >= startDate && charge.Key <= endDate)
+                .Sum(charge => charge.Value.Amount);
     }
 }

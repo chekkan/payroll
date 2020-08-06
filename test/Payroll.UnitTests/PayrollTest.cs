@@ -552,6 +552,53 @@ namespace Payroll.UnitTests
             var payDate = new DateTime(2001, 11, 9);
             var sct = new ServiceChargeTransaction(memberId, payDate, 19.42);
             sct.Execute();
+
+            var tct = new TimeCardTransaction(payDate, 8.0, empId);
+            tct.Execute();
+
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+
+            Paycheck pc = pt.GetPaycheck(empId);
+            Assert.NotNull(pc);
+            Assert.Equal(payDate, pc.PayPeriodEndDate);
+            Assert.Equal(8 * 15.25, pc.GrossPay);
+            Assert.Equal("Hold", pc.GetField("Disposition"));
+            Assert.Equal(9.42 + 19.42, pc.Deductions);
+            Assert.Equal((8 * 15.25) - (9.42 + 19.42), pc.NetPay);
+        }
+
+        [Fact]
+        public void ServiceChargesSpanningMultiplePayPeriods()
+        {
+            int empId = SetupHourlyEmployee();
+            int memberId = 7734;
+            var cmt = new ChangeMemberTransaction(empId, memberId, 9.42);
+            cmt.Execute();
+
+            var payDate = new DateTime(2001, 11, 9);
+            var earlyDate = new DateTime(2001, 11, 2); // previous Friday
+            var lateDate = new DateTime(2001, 11, 16); // next Friday
+
+            var sct = new ServiceChargeTransaction(memberId, payDate, 19.42);
+            sct.Execute();
+            var sctEarly = new ServiceChargeTransaction(memberId, earlyDate, 100.0);
+            sctEarly.Execute();
+            var sctLate = new ServiceChargeTransaction(memberId, lateDate, 200.0);
+            sctLate.Execute();
+
+            var tct = new TimeCardTransaction(payDate, 8.0, empId);
+            tct.Execute();
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+
+            Paycheck pc = pt.GetPaycheck(empId);
+            Assert.NotNull(pc);
+            Assert.Equal(payDate, pc.PayPeriodEndDate);
+            Assert.Equal(8 * 15.25, pc.GrossPay);
+            Assert.Equal("Hold", pc.GetField("Disposition"));
+            Assert.Equal(9.42 + 19.42, pc.Deductions);
+            Assert.Equal((8 * 15.25) - (9.42 + 19.42), pc.NetPay);
         }
 
         private static int SetupCommissionedEmployee(

@@ -4,14 +4,13 @@ namespace Payroll
 {
     public class ServiceCharge
     {
-        private readonly DateTime time;
-
         public ServiceCharge(DateTime time, double amount)
         {
-            this.time = time;
+            Time = time;
             Amount = amount;
         }
 
+        public DateTime Time { get; }
         public double Amount { get; }
     }
 }

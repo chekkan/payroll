@@ -10,8 +10,7 @@ namespace Payroll
         {
             DateTime payPeriodEndDate = paycheck.PayPeriodEndDate;
             DateTime payPeriodStartDate = paycheck.PayPeriodStartDate;
-            return (theDate >= payPeriodStartDate)
-                && (theDate <= payPeriodEndDate);
+            return DateUtil.IsInPayPeriod(theDate, payPeriodStartDate, payPeriodEndDate);
         }
     }
 }
