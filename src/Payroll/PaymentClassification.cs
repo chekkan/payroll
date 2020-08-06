@@ -1,7 +1,17 @@
-﻿namespace Payroll
+﻿using System;
+
+namespace Payroll
 {
-    public interface PaymentClassification
+    public abstract class PaymentClassification
     {
-        double CalculatePay(Paycheck paycheck);
+        public abstract double CalculatePay(Paycheck paycheck);
+
+        public bool IsInPayPeriod(DateTime theDate, Paycheck paycheck)
+        {
+            DateTime payPeriodEndDate = paycheck.PayPeriodEndDate;
+            DateTime payPeriodStartDate = paycheck.PayPeriodStartDate;
+            return (theDate >= payPeriodStartDate)
+                && (theDate <= payPeriodEndDate);
+        }
     }
 }

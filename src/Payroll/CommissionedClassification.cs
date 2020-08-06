@@ -20,9 +20,9 @@ namespace Payroll
 
         public SalesReceipt GetSalesReceipt(DateTime date) => salesReceipts[date];
 
-        public double CalculatePay(Paycheck paycheck) =>
+        public override double CalculatePay(Paycheck paycheck) =>
             salesReceipts.Values
-            .Where(r => IsInPayPeriod(r, paycheck.PayDate))
+            .Where(r => IsInPayPeriod(r.Date, paycheck))
             .Sum(r => r.Amount)
             * CommissionRate
             + Salary;
@@ -30,14 +30,6 @@ namespace Payroll
         public void AddSalesReceipt(SalesReceipt salesReceipt)
         {
             this.salesReceipts.Add(salesReceipt.Date, salesReceipt);
-        }
-
-        private static bool IsInPayPeriod(SalesReceipt receipt, DateTime payDate)
-        {
-            DateTime payPeriodEndDate = payDate;
-            DateTime payPeriodStartDate = payDate.AddDays(-14);
-            return receipt.Date <= payPeriodEndDate &&
-                receipt.Date >= payPeriodStartDate;
         }
     }
 }

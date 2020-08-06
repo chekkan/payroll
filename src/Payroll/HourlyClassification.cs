@@ -20,13 +20,13 @@ namespace Payroll
             timeCards.Add(timeCard.Date, timeCard);
         }
 
-        public double CalculatePay(Paycheck paycheck)
+        public override double CalculatePay(Paycheck paycheck)
         {
             double totalPay = 0.0;
 
             foreach (var timeCard in timeCards.Values)
             {
-                if (IsInPayPeriod(timeCard, paycheck.PayDate))
+                if (IsInPayPeriod(timeCard.Date, paycheck))
                     totalPay += CalculatePayForTimeCard(timeCard);
             }
 
@@ -34,14 +34,6 @@ namespace Payroll
         }
 
         public TimeCard GetTimeCard(DateTime dateTime) => timeCards[dateTime];
-
-        private bool IsInPayPeriod(TimeCard card, DateTime payPeriod)
-        {
-            DateTime payPeriodEndDate = payPeriod;
-            DateTime payPeriodStartDate = payPeriod.AddDays(-5);
-
-            return card.Date <= payPeriodEndDate && card.Date >= payPeriodStartDate;
-        }
 
         private double CalculatePayForTimeCard(TimeCard card)
         {

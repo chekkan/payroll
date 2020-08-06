@@ -9,11 +9,22 @@ namespace Payroll
         public bool IsPayDate(DateTime payDate) =>
             IsSecondFriday(payDate) || IsFourthFriday(payDate);
 
+        public DateTime GetPeriodStartDate(DateTime payDate) =>
+            IsSecondFriday(payDate)
+                ? FourthFridayOfMonth(payDate.AddMonths(-1)).AddDays(1)
+                : SecondFridayOfMonth(payDate).AddDays(1);
+
         private bool IsSecondFriday(DateTime date) =>
-            IsFriday(date) && FridaysOfMonth(date).Skip(1).First() == date.Date;
+            IsFriday(date) && SecondFridayOfMonth(date) == date.Date;
+
+        private DateTime SecondFridayOfMonth(DateTime aDate) =>
+            FridaysOfMonth(aDate).Skip(1).First();
 
         private bool IsFourthFriday(DateTime date) =>
-            IsFriday(date) && FridaysOfMonth(date).Skip(3).First() == date.Date;
+            IsFriday(date) && FourthFridayOfMonth(date) == date.Date;
+
+        private DateTime FourthFridayOfMonth(DateTime aDate) =>
+            FridaysOfMonth(aDate).Skip(3).First();
 
         private IEnumerable<DateTime> FridaysOfMonth(DateTime date)
         {

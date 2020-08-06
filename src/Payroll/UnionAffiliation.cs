@@ -20,9 +20,28 @@ namespace Payroll
             this.serviceCharge = serviceCharge;
         }
 
-        public double CalculateDeduction(Paycheck paycke)
+        public double CalculateDeduction(Paycheck paycheck)
         {
-            throw new NotImplementedException();
+            double totalDues = 0;
+            int fridays = NumberOfFridaysInPayPeriod(paycheck.PayPeriodStartDate,
+                                                     paycheck.PayPeriodEndDate);
+            totalDues = Dues * fridays;
+            return totalDues;
+        }
+
+        private int NumberOfFridaysInPayPeriod(DateTime payPeriodStart,
+                                               DateTime payPeriodEnd)
+        {
+            int fridays = 0;
+            for (DateTime day = payPeriodStart;
+                 day <= payPeriodEnd;
+                 day = day.AddDays(1))
+            {
+                if (day.DayOfWeek == DayOfWeek.Friday)
+                    fridays++;
+            }
+
+            return fridays;
         }
 
         public ServiceCharge GetServiceCharge(DateTime time)

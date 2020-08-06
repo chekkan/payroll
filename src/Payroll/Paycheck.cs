@@ -7,10 +7,11 @@ namespace Payroll
     {
         private readonly IDictionary<string, string> fields;
 
-        public Paycheck(DateTime payDate)
+        public Paycheck(DateTime startDate, DateTime payDate)
         {
             fields = new Dictionary<string, string>();
-            PayDate = payDate;
+            PayPeriodStartDate = startDate;
+            PayPeriodEndDate = payDate;
         }
 
         public void SetField(string key, string value)
@@ -18,7 +19,8 @@ namespace Payroll
             fields[key] = value;
         }
 
-        public DateTime PayDate { get; }
+        public DateTime PayPeriodStartDate { get; }
+        public DateTime PayPeriodEndDate { get; }
         public double GrossPay { get; set; }
         public double Deductions { get; set; }
         public double NetPay { get; set; }

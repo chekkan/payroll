@@ -29,5 +29,8 @@ namespace Payroll
             paycheck.NetPay = netPay;
             Method.Pay(paycheck);
         }
+
+        public DateTime GetPayPeriodStartDate(DateTime payDate) =>
+            Schedule.GetPeriodStartDate(payDate);
     }
 }

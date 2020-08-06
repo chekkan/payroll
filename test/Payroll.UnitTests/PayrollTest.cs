@@ -521,6 +521,39 @@ namespace Payroll.UnitTests
             ValidateNoDeductionPaycheck(pt, empId, payDate, pay);
         }
 
+        [Fact]
+        public void SalariedUnionMemberDues()
+        {
+            int empId = SetupSalariedEmployee();
+            int memberId = 7734;
+            var cmt = new ChangeMemberTransaction(empId, memberId, 9.42);
+            cmt.Execute();
+            var payDate = new DateTime(2001, 11, 30);
+            var pt = new PaydayTransaction(payDate);
+            pt.Execute();
+
+            Paycheck pc = pt.GetPaycheck(empId);
+            Assert.NotNull(pc);
+            Assert.Equal(payDate, pc.PayPeriodEndDate);
+            Assert.Equal(2300.0, pc.GrossPay);
+            Assert.Equal("Hold", pc.GetField("Disposition"));
+            Assert.Equal(5 * 9.42, pc.Deductions);
+            Assert.Equal(2300.0 - 5 * 9.42, pc.NetPay);
+        }
+
+        [Fact]
+        public void HourlyUnionMemberServiceCharge()
+        {
+            int empId = SetupHourlyEmployee();
+            int memberId = 7734;
+            var cmt = new ChangeMemberTransaction(empId, memberId, 9.42);
+            cmt.Execute();
+
+            var payDate = new DateTime(2001, 11, 9);
+            var sct = new ServiceChargeTransaction(memberId, payDate, 19.42);
+            sct.Execute();
+        }
+
         private static int SetupCommissionedEmployee(
                                                 int empId = CommissionedEmployeeId)
         {
@@ -550,7 +583,7 @@ namespace Payroll.UnitTests
         {
             Paycheck pc = pt.GetPaycheck(empId);
             Assert.NotNull(pc);
-            Assert.Equal(payDate, pc.PayDate);
+            Assert.Equal(payDate, pc.PayPeriodEndDate);
             Assert.Equal(pay, pc.GrossPay);
             Assert.Equal("Hold", pc.GetField("Disposition"));
             Assert.Equal(0.0, pc.Deductions);

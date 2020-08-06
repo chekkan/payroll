@@ -12,5 +12,8 @@ namespace Payroll
         }
 
         public bool IsPayDate(DateTime payDate) => IsLastDayOfMonth(payDate);
+
+        public DateTime GetPeriodStartDate(DateTime payDate) =>
+            new DateTime(payDate.Year, payDate.Month, 1);
     }
 }
