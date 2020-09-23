@@ -27,10 +27,9 @@ namespace Payroll
 
         public double CalculateDeduction(Paycheck paycheck)
         {
-            double totalDues = 0;
             int fridays = NumberOfFridaysInPayPeriod(paycheck.PayPeriodStartDate,
                                                      paycheck.PayPeriodEndDate);
-            totalDues = Dues * fridays;
+            double totalDues = Dues * fridays;
 
             double serviceCharge = ServiceChargeForPeriod(paycheck.PayPeriodStartDate,
                                                              paycheck.PayPeriodEndDate);
@@ -38,7 +37,7 @@ namespace Payroll
             return totalDues + serviceCharge;
         }
 
-        private int NumberOfFridaysInPayPeriod(DateTime payPeriodStart,
+        private static int NumberOfFridaysInPayPeriod(DateTime payPeriodStart,
                                                DateTime payPeriodEnd)
         {
             int fridays = 0;

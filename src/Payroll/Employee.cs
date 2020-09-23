@@ -4,8 +4,11 @@ namespace Payroll
 {
     public class Employee
     {
-        public Employee(int empid, string name, string address)
+        private readonly int empId;
+
+        public Employee(int empId, string name, string address)
         {
+            this.empId = empId;
             Name = name;
             Address = address;
         }
