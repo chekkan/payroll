@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Payroll
 {
@@ -22,15 +23,8 @@ namespace Payroll
 
         public override double CalculatePay(Paycheck paycheck)
         {
-            double totalPay = 0.0;
-
-            foreach (var timeCard in timeCards.Values)
-            {
-                if (IsInPayPeriod(timeCard.Date, paycheck))
-                    totalPay += CalculatePayForTimeCard(timeCard);
-            }
-
-            return totalPay;
+            return timeCards.Values.Where(timeCard => IsInPayPeriod(timeCard.Date, paycheck))
+                .Sum(CalculatePayForTimeCard);
         }
 
         public TimeCard GetTimeCard(DateTime dateTime) => timeCards[dateTime];

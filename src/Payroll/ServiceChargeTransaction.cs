@@ -22,8 +22,8 @@ namespace Payroll
             if (e != null)
             {
                 UnionAffiliation ua = null;
-                if (e.Affiliation is UnionAffiliation)
-                    ua = e.Affiliation as UnionAffiliation;
+                if (e.Affiliation is UnionAffiliation affiliation)
+                    ua = affiliation;
 
                 if (ua != null)
                     ua.AddServiceCharge(new ServiceCharge(time, charge));
@@ -33,7 +33,7 @@ namespace Payroll
                             "without a union affiliation");
             }
             else
-                throw new InvalidOperationException("No such unon member.");
+                throw new InvalidOperationException("No such union member.");
         }
     }
 }

@@ -1,38 +1,37 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 namespace Payroll
 {
-    public class PayrollDatabase
+    public static class PayrollDatabase
     {
-        private static Hashtable employees = new Hashtable();
-        private static Hashtable unionMembers = new Hashtable();
+        private static readonly Hashtable Employees = new Hashtable();
+        private static readonly Hashtable UnionMembers = new Hashtable();
 
         public static void AddEmployee(int id, Employee employee)
         {
-            employees[id] = employee;
+            Employees[id] = employee;
         }
 
         internal static void DeleteEmployee(int id)
         {
-            employees.Remove(id);
+            Employees.Remove(id);
         }
 
         public static void DeleteAll()
         {
-            employees.Clear();
-            unionMembers.Clear();
+            Employees.Clear();
+            UnionMembers.Clear();
         }
 
         public static Employee GetEmployee(int id)
         {
-            return employees[id] as Employee;
+            return Employees[id] as Employee;
         }
 
-        public static int[] GetAllEmployeeIds()
+        public static IEnumerable<int> GetAllEmployeeIds()
         {
-            ICollection ids = employees.Keys;
+            ICollection ids = Employees.Keys;
             int[] result = new int[ids.Count];
             ids.CopyTo(result, 0);
             return result;
@@ -40,17 +39,17 @@ namespace Payroll
 
         public static Employee GetUnionMember(int memberId)
         {
-            return unionMembers[memberId] as Employee;
+            return UnionMembers[memberId] as Employee;
         }
 
         public static void AddUnionMember(int id, Employee employee)
         {
-            unionMembers[id] = employee;
+            UnionMembers[id] = employee;
         }
 
         public static void RemoveUnionMember(int id)
         {
-            unionMembers.Remove(id);
+            UnionMembers.Remove(id);
         }
     }
 }

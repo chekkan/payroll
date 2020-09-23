@@ -6,7 +6,7 @@ namespace Payroll
 {
     public class CommissionedClassification : PaymentClassification
     {
-        private IDictionary<DateTime, SalesReceipt> salesReceipts;
+        private readonly IDictionary<DateTime, SalesReceipt> salesReceipts;
 
         public CommissionedClassification(double salary, double commissionRate)
         {
@@ -15,8 +15,8 @@ namespace Payroll
             salesReceipts = new Dictionary<DateTime, SalesReceipt>();
         }
 
-        public double Salary { get; private set; }
-        public double CommissionRate { get; private set; }
+        public double Salary { get; }
+        public double CommissionRate { get; }
 
         public SalesReceipt GetSalesReceipt(DateTime date) => salesReceipts[date];
 

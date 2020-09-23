@@ -21,13 +21,10 @@ namespace Payroll
 
             if (e != null)
             {
-                var hc = e.Classification as HourlyClassification;
-
-                if (hc != null)
+                if (e.Classification is HourlyClassification hc)
                     hc.AddTimeCard(new TimeCard(date, hours));
                 else
-                    throw new InvalidOperationException(
-                                          "Tried to add timecard to non-hourly employee");
+                    throw new InvalidOperationException("Tried to add time card to non-hourly employee");
             }
             else
                 throw new InvalidOperationException("No such employee.");

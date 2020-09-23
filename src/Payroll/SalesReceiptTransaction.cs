@@ -19,16 +19,13 @@ namespace Payroll
         {
             Employee e = PayrollDatabase.GetEmployee(empId);
 
-            if (e != null)
-            {
-                var cc = e.Classification as CommissionedClassification;
+            if (e == null)
+                return;
 
-                if (cc != null)
-                    cc.AddSalesReceipt(new SalesReceipt(date, amount));
-                else
-                    throw new InvalidOperationException(
-                           "Tried to add sales receipt to non-commissioned employee");
-            }
+            if (e.Classification is CommissionedClassification cc)
+                cc.AddSalesReceipt(new SalesReceipt(date, amount));
+            else
+                throw new InvalidOperationException("Tried to add sales receipt to non-commissioned employee");
         }
     }
 }
