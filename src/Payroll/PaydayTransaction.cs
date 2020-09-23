@@ -30,7 +30,7 @@ namespace Payroll
             }
         }
 
-        public Paycheck GetPaycheck(int empId)
+        public static Paycheck GetPaycheck(int empId)
         {
             return Paychecks[empId] as Paycheck;
         }

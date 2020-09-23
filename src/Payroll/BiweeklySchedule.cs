@@ -14,19 +14,19 @@ namespace Payroll
                 ? FourthFridayOfMonth(payDate.AddMonths(-1)).AddDays(1)
                 : SecondFridayOfMonth(payDate).AddDays(1);
 
-        private bool IsSecondFriday(DateTime date) =>
+        private static bool IsSecondFriday(DateTime date) =>
             IsFriday(date) && SecondFridayOfMonth(date) == date.Date;
 
-        private DateTime SecondFridayOfMonth(DateTime aDate) =>
+        private static DateTime SecondFridayOfMonth(DateTime aDate) =>
             FridaysOfMonth(aDate).Skip(1).First();
 
-        private bool IsFourthFriday(DateTime date) =>
+        private static bool IsFourthFriday(DateTime date) =>
             IsFriday(date) && FourthFridayOfMonth(date) == date.Date;
 
-        private DateTime FourthFridayOfMonth(DateTime aDate) =>
+        private static DateTime FourthFridayOfMonth(DateTime aDate) =>
             FridaysOfMonth(aDate).Skip(3).First();
 
-        private IEnumerable<DateTime> FridaysOfMonth(DateTime date)
+        private static IEnumerable<DateTime> FridaysOfMonth(DateTime date)
         {
             var firstDay = new DateTime(date.Year, date.Month, 1);
             var nextMonth = date.AddMonths(1);
@@ -35,19 +35,19 @@ namespace Payroll
             return GetFridays(firstDay, lastDay);
         }
 
-        private IEnumerable<DateTime> GetFridays(DateTime startdate, DateTime enddate)
+        private static IEnumerable<DateTime> GetFridays(DateTime startDate, DateTime endDate)
         {
             // step forward to the first friday
-            while (!IsFriday(startdate))
-                startdate = startdate.AddDays(1);
+            while (!IsFriday(startDate))
+                startDate = startDate.AddDays(1);
 
-            while (startdate <= enddate)
+            while (startDate <= endDate)
             {
-                yield return startdate;
-                startdate = startdate.AddDays(7);
+                yield return startDate;
+                startDate = startDate.AddDays(7);
             }
         }
 
-        private bool IsFriday(DateTime date) => date.DayOfWeek == DayOfWeek.Friday;
+        private static bool IsFriday(DateTime date) => date.DayOfWeek == DayOfWeek.Friday;
     }
 }

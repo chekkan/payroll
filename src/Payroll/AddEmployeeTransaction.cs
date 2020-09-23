@@ -2,13 +2,13 @@
 {
     public abstract class AddEmployeeTransaction : Transaction
     {
-        private readonly int empid;
+        private readonly int empId;
         private readonly string name;
         private readonly string address;
 
-        public AddEmployeeTransaction(int empid, string name, string address)
+        protected AddEmployeeTransaction(int empId, string name, string address)
         {
-            this.empid = empid;
+            this.empId = empId;
             this.name = name;
             this.address = address;
         }
@@ -22,12 +22,14 @@
             PaymentSchedule ps = MakeSchedule();
             PaymentMethod pm = new HoldMethod();
 
-            Employee e = new Employee(empid, name, address);
-            e.Classification = pc;
-            e.Schedule = ps;
-            e.Method = pm;
-            e.Affiliation = new NoAffiliation();
-            PayrollDatabase.AddEmployee(empid, e);
+            Employee e = new Employee(empId, name, address)
+            {
+                Classification = pc, 
+                Schedule = ps,
+                Method = pm, 
+                Affiliation = new NoAffiliation()
+            };
+            PayrollDatabase.AddEmployee(empId, e);
         }
     }
 }

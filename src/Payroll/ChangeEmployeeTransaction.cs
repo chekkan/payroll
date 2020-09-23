@@ -6,7 +6,7 @@ namespace Payroll
     {
         private readonly int empId;
 
-        public ChangeEmployeeTransaction(int empId)
+        protected ChangeEmployeeTransaction(int empId)
         {
             this.empId = empId;
         }

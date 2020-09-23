@@ -1,15 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace Payroll
+﻿namespace Payroll
 {
     public class AddSalariedEmployee : AddEmployeeTransaction
     {
         private readonly double salary;
 
-        public AddSalariedEmployee(int id,
-                                   string name,
-                                   string address,
-                                   double salary) : base(id, name, address)
+        public AddSalariedEmployee(int id, string name, string address, double salary) : base(id, name, address)
         {
             this.salary = salary;
         }

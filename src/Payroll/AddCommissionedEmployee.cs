@@ -5,11 +5,11 @@
         private readonly double salary;
         private readonly double rate;
 
-        public AddCommissionedEmployee(int empid,
+        public AddCommissionedEmployee(int empId,
                                        string name,
                                        string address,
                                        double salary,
-                                       double rate) : base(empid, name, address)
+                                       double rate) : base(empId, name, address)
         {
             this.salary = salary;
             this.rate = rate;

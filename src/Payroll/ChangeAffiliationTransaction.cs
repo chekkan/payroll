@@ -2,7 +2,7 @@
 {
     public abstract class ChangeAffiliationTransaction : ChangeEmployeeTransaction
     {
-        public ChangeAffiliationTransaction(int empId) : base(empId)
+        protected ChangeAffiliationTransaction(int empId) : base(empId)
         { }
 
         protected override void Change(Employee e)

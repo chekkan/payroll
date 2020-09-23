@@ -2,7 +2,7 @@
 {
     public abstract class ChangeClassificationTransaction : ChangeEmployeeTransaction
     {
-        public ChangeClassificationTransaction(int id) : base(id)
+        protected ChangeClassificationTransaction(int id) : base(id)
         {
         }
 

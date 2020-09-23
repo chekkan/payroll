@@ -97,7 +97,7 @@ namespace Payroll.UnitTests
         {
             int empId = SetupCommissionedEmployee();
             var date = new DateTime(2020, 7, 27);
-            var amount = 490_000.0;
+            const double amount = 490_000.0;
 
             var srt = new SalesReceiptTransaction(empId, date, amount);
             srt.Execute();
@@ -120,7 +120,7 @@ namespace Payroll.UnitTests
             Employee e = PayrollDatabase.GetEmployee(empId);
             Assert.NotNull(e);
 
-            int memberId = 86; // Maxwell Smart
+            const int memberId = 86; // Maxwell Smart
             var af = new UnionAffiliation(memberId, 12.95);
             e.Affiliation = af;
             PayrollDatabase.AddUnionMember(memberId, e);
@@ -274,7 +274,7 @@ namespace Payroll.UnitTests
         public void ChangeUnionMember()
         {
             int empId = SetupHourlyEmployee();
-            int memberId = 7743;
+            const int memberId = 7743;
 
             var cmt = new ChangeMemberTransaction(empId, memberId, 99.42);
             cmt.Execute();
@@ -299,7 +299,7 @@ namespace Payroll.UnitTests
         {
             var empId = SetupHourlyEmployee();
             // Make sure the employee is union affiliated
-            int memberId = 7743;
+            const int memberId = 7743;
             var cmt = new ChangeMemberTransaction(empId, memberId, 99.42);
             cmt.Execute();
 
@@ -312,7 +312,7 @@ namespace Payroll.UnitTests
             Affiliation affiliation = e.Affiliation;
             Assert.NotNull(affiliation);
 
-            var nf = Assert.IsType<NoAffiliation>(affiliation);
+            Assert.IsType<NoAffiliation>(affiliation);
             Employee member = PayrollDatabase.GetUnionMember(memberId);
             Assert.Null(member);
         }
@@ -325,7 +325,7 @@ namespace Payroll.UnitTests
 
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
-            ValidateNoDeductionPaycheck(pt, empId, payDate, 2300.0);
+            ValidateNoDeductionPaycheck(empId, payDate, 2300.0);
         }
 
         [Fact]
@@ -337,7 +337,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            Paycheck pc = pt.GetPaycheck(empId);
+            Paycheck pc = PaydayTransaction.GetPaycheck(empId);
             Assert.Null(pc);
         }
 
@@ -350,7 +350,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            ValidateNoDeductionPaycheck(pt, empId, payDate, 0.0);
+            ValidateNoDeductionPaycheck(empId, payDate, 0.0);
         }
 
         [Fact]
@@ -365,7 +365,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            ValidateNoDeductionPaycheck(pt, empId, payDate, 30.5);
+            ValidateNoDeductionPaycheck(empId, payDate, 30.5);
         }
 
         [Fact]
@@ -380,7 +380,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            ValidateNoDeductionPaycheck(pt, empId, payDate, (8 + 1.5) * 15.25);
+            ValidateNoDeductionPaycheck(empId, payDate, (8 + 1.5) * 15.25);
         }
 
         [Fact]
@@ -395,7 +395,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            Paycheck pc = pt.GetPaycheck(empId);
+            Paycheck pc = PaydayTransaction.GetPaycheck(empId);
             Assert.Null(pc);
         }
 
@@ -413,7 +413,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            ValidateNoDeductionPaycheck(pt, empId, payDate, 7 * 15.25);
+            ValidateNoDeductionPaycheck(empId, payDate, 7 * 15.25);
         }
 
         [Fact]
@@ -431,7 +431,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            ValidateNoDeductionPaycheck(pt, empId, payDate, 2 * 15.25);
+            ValidateNoDeductionPaycheck(empId, payDate, 2 * 15.25);
         }
 
         [Fact]
@@ -446,7 +446,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            ValidateNoDeductionPaycheck(pt, empId, payDate, 40_000 * 2.5 + 1500);
+            ValidateNoDeductionPaycheck(empId, payDate, 40_000 * 2.5 + 1500);
         }
 
         [Fact]
@@ -461,7 +461,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            Paycheck paycheck = pt.GetPaycheck(empId);
+            Paycheck paycheck = PaydayTransaction.GetPaycheck(empId);
             Assert.Null(paycheck);
         }
 
@@ -477,7 +477,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            ValidateNoDeductionPaycheck(pt, empId, payDate, 50_000 * 2.5 + 1500);
+            ValidateNoDeductionPaycheck(empId, payDate, 50_000 * 2.5 + 1500);
         }
 
         [Fact]
@@ -491,12 +491,12 @@ namespace Payroll.UnitTests
             var srt2 = new SalesReceiptTransaction(empId, payDate.AddDays(-2), 10_000);
             srt2.Execute();
 
-            var pay = (50_000 + 10_000) * 2.5 + 1500;
+            const double pay = (50_000 + 10_000) * 2.5 + 1500;
 
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            ValidateNoDeductionPaycheck(pt, empId, payDate, pay);
+            ValidateNoDeductionPaycheck(empId, payDate, pay);
         }
 
         [Fact]
@@ -513,26 +513,26 @@ namespace Payroll.UnitTests
                                                    10_000);
             srt2.Execute();
 
-            var pay = 50_000 * 2.5 + 1500;
+            const double pay = 50_000 * 2.5 + 1500;
 
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            ValidateNoDeductionPaycheck(pt, empId, payDate, pay);
+            ValidateNoDeductionPaycheck(empId, payDate, pay);
         }
 
         [Fact]
         public void SalariedUnionMemberDues()
         {
             int empId = SetupSalariedEmployee();
-            int memberId = 7734;
+            const int memberId = 7734;
             var cmt = new ChangeMemberTransaction(empId, memberId, 9.42);
             cmt.Execute();
             var payDate = new DateTime(2001, 11, 30);
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            Paycheck pc = pt.GetPaycheck(empId);
+            Paycheck pc = PaydayTransaction.GetPaycheck(empId);
             Assert.NotNull(pc);
             Assert.Equal(payDate, pc.PayPeriodEndDate);
             Assert.Equal(2300.0, pc.GrossPay);
@@ -545,7 +545,7 @@ namespace Payroll.UnitTests
         public void HourlyUnionMemberServiceCharge()
         {
             int empId = SetupHourlyEmployee();
-            int memberId = 7734;
+            const int memberId = 7734;
             var cmt = new ChangeMemberTransaction(empId, memberId, 9.42);
             cmt.Execute();
 
@@ -559,7 +559,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            Paycheck pc = pt.GetPaycheck(empId);
+            Paycheck pc = PaydayTransaction.GetPaycheck(empId);
             Assert.NotNull(pc);
             Assert.Equal(payDate, pc.PayPeriodEndDate);
             Assert.Equal(8 * 15.25, pc.GrossPay);
@@ -572,7 +572,7 @@ namespace Payroll.UnitTests
         public void ServiceChargesSpanningMultiplePayPeriods()
         {
             int empId = SetupHourlyEmployee();
-            int memberId = 7734;
+            const int memberId = 7734;
             var cmt = new ChangeMemberTransaction(empId, memberId, 9.42);
             cmt.Execute();
 
@@ -592,7 +592,7 @@ namespace Payroll.UnitTests
             var pt = new PaydayTransaction(payDate);
             pt.Execute();
 
-            Paycheck pc = pt.GetPaycheck(empId);
+            Paycheck pc = PaydayTransaction.GetPaycheck(empId);
             Assert.NotNull(pc);
             Assert.Equal(payDate, pc.PayPeriodEndDate);
             Assert.Equal(8 * 15.25, pc.GrossPay);
@@ -623,12 +623,9 @@ namespace Payroll.UnitTests
             return empId;
         }
 
-        private void ValidateNoDeductionPaycheck(PaydayTransaction pt,
-                                            int empId,
-                                            DateTime payDate,
-                                            double pay)
+        private static void ValidateNoDeductionPaycheck(int empId, DateTime payDate, double pay)
         {
-            Paycheck pc = pt.GetPaycheck(empId);
+            Paycheck pc = PaydayTransaction.GetPaycheck(empId);
             Assert.NotNull(pc);
             Assert.Equal(payDate, pc.PayPeriodEndDate);
             Assert.Equal(pay, pc.GrossPay);
